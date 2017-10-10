@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataStructureCollectionUWP.Trie
 {
-    class DictionaryManager
+    public class DictionaryManager
     {
         FourLettersDictionary dictionary;
         private static DictionaryManager instance;
