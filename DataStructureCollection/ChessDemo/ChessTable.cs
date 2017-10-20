@@ -8,12 +8,24 @@ namespace AlphaBetaPruning
     public class ChessTable
     {
         #region fields
-        public const short SIZE = 3;
+        public const short SIZE = 5;
 
         private const short CELL_COUNT = SIZE * SIZE;
 
-        private uint table;
+        private ulong table;
         #endregion
+
+        public ulong Table
+        {
+            get
+            {                
+                return table;
+            }
+            set
+            {
+                table = value;
+            }
+        }
 
         /// <summary>
         /// Get Value of 2D Table's value by position 
@@ -28,12 +40,12 @@ namespace AlphaBetaPruning
                 return -1;
             int index = row * SIZE + column;
 
-            if (((table >> index) & 1U) == 1U)
+            if (((table >> index) & 1UL) == 1UL)
             {
                 //return ((table >> index + CellCount) & 1U) == 1U
                 //    ? Value.Maximizing
                 //    : Value.Minimizing;
-                return ((table >> index + CELL_COUNT) & 1U) == 1U ? 1: 2;
+                return ((table >> index + CELL_COUNT) & 1UL) == 1UL ? 1: 2;
             }
             return 0;
         }
@@ -51,8 +63,8 @@ namespace AlphaBetaPruning
         {
             int index = row * SIZE + column;
 
-            uint freeCellsMask = 1U << index;
-            uint valuesMask = 1U << (index + CELL_COUNT);
+            ulong freeCellsMask = 1UL << index;
+            ulong valuesMask = 1UL << (index + CELL_COUNT);
 
             if (value == PlayerType.None)
             {

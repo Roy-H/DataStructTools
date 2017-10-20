@@ -247,7 +247,18 @@ namespace DataStructureCollection
             Children.Remove(node);
             return true;
         }
-       
+
+        
+        INode INode.ResetTable()
+        {
+            throw new NotImplementedException();
+        }
+
+        public INode UpdateTable()
+        {
+            throw new NotImplementedException();
+        }
+
         public int Value { get; set; }
 
         public int Alpha { get; set; }
@@ -289,5 +300,9 @@ namespace DataStructureCollection
         /// from maximizing player's perspective.
         /// </summary>
         int Heuristics { get; }
+
+        INode ResetTable();
+
+        INode UpdateTable();
     }
 }

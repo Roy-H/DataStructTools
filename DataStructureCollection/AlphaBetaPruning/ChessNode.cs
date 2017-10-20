@@ -169,6 +169,22 @@ namespace AlphaBetaPruning
             }).ToList();
         }
 
+        public void ResetTable()
+        {
+            int[] mins = new int[] { };
+            for (int i = 0; i < ChessTable.SIZE; i++)
+            {
+                for (int j = 0; j < ChessTable.SIZE; j++)
+                {
+                    if (i == 0 || i == ChessTable.SIZE - 1 || j == 0 || j == ChessTable.SIZE - 1)
+                        stateTable.SetValue(PlayerType.Minimizing, i, j);
+                    else
+                        stateTable.SetValue(PlayerType.None, i, j);
+                }
+            }
+            stateTable.SetValue(PlayerType.Maximizing, ChessTable.SIZE/2, ChessTable.SIZE / 2);
+        }
+
         private IEnumerable<Move> GetMovements()
         {     
             for (short i = 0; i < ChessTable.SIZE; ++i)

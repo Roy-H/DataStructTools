@@ -19,17 +19,26 @@ namespace ChessDemo
         {
             //AlphaBetaDemo(new ReversiNode(), 5U);
             //AlphaBetaDemo(new TicTacToeNode(), 2U);
-            AlphaBetaDemo2(new ChessNode(), 3U);
+            AlphaBetaDemo2((new ChessNode().ResetTable()), 3U);
         }
 
         private static void AlphaBetaDemo2<Node>(Node state, uint depth) where Node: DataStructureCollection.INode
         {
             DataStructureCollection.AlphaBeta<Node> search = new DataStructureCollection.AlphaBeta<Node>() { Depth = depth};
-
+            //state.ResetTable();
+            //Console.WriteLine(state);
             while (state.Children.Any())
             {
-                Console.WriteLine(state);
+                
                 state = search.BestAsync(state).Result;
+                Console.WriteLine(state);
+                //update state
+                if (state.Opponent == PlayerType.Maximizing)
+                {
+                    //only when max remove can delete node of min
+                    state.UpdateTable();
+                }               
+                Console.WriteLine(state);
             }
 
             Console.WriteLine(state);
@@ -48,9 +57,9 @@ namespace ChessDemo
         /// <typeparam name="Node">The type of the node.</typeparam>
         /// <param name="state">The initial state.</param>
         /// <param name="depth">The search depth.</param>
-        private static void AlphaBetaDemo<Node>(Node state, uint depth) where Node : INode
+        private static void AlphaBetaDemo<Node>(Node state, uint depth) where Node : AlphaBeta.INode
         {
-            AlphaBeta<Node> search = new AlphaBeta<Node>(depth);
+            AlphaBeta.AlphaBeta<Node> search = new AlphaBeta.AlphaBeta<Node>(depth);
 
             while (state.Children.Any())
             {
