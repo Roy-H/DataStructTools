@@ -84,5 +84,46 @@ namespace AlphaBetaPruning
                 }
             }
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder("  ");
+            for (int i = 0; i < ChessTable.SIZE; ++i)
+            {
+                sb.Append($"{i} ");
+            }
+
+            sb.AppendLine();
+            for (int i = 0; i < ChessTable.SIZE; ++i)
+            {
+                sb.Append($"{i}|");
+                for (int j = 0; j < ChessTable.SIZE; ++j)
+                {
+                    int value = GetValue(i, j);
+                    if (value == 0)
+                    {
+                        sb.Append('-');
+                    }
+                    else if (value == 1)
+                    {
+                        sb.Append('X');
+                    }
+                    else
+                    {
+                        sb.Append('O');
+                    }
+
+                    if (j < ChessTable.SIZE - 1)
+                    {
+                        sb.Append(" ");
+                    }
+                }
+
+                sb.Append('|');
+                sb.AppendLine();
+            }
+
+            return sb.ToString();
+        }
     }
 }

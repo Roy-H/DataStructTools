@@ -170,9 +170,39 @@ namespace AlphaBetaPruning
             return PlayerType.None;
         }
 
+        private int GetMinNum()
+        {
+            int count = 0;
+            for (int i = 0; i < ChessTable.SIZE; i++)
+            {
+                for (int j = 0; j < ChessTable.SIZE; j++)
+                {
+                    if (stateTable.GetValue(i, j) == 2)
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+
         private int GetHeuristics()
         {
-            return 1;
+            if (Player == PlayerType.Maximizing)
+            {
+                var value1 = GetMinNum();
+                Console.WriteLine("GetHeuristics 1: " + value1);
+                Console.WriteLine(stateTable.ToString());
+                return value1;
+            }
+            else if (Player == PlayerType.Minimizing)
+            {
+                var value2 = GetMinNum();
+                Console.WriteLine("GetHeuristics 2: " + value2);
+                Console.WriteLine(stateTable.ToString());
+                return -value2;
+            }
+            return 0;
         }
 
         private IReadOnlyList<ChessNode> GetChildren()
@@ -276,6 +306,13 @@ namespace AlphaBetaPruning
             newTable.Table = stateTable.Table;
             newTable.SetValue(PlayerType.None, move.From.Item1, move.From.Item2);
             newTable.SetValue(Player, move.To.Item1, move.To.Item2);
+            if (Player == PlayerType.Maximizing)
+            {
+                UpdateTable(newTable);
+                //Console.WriteLine("new table:");
+                //Console.WriteLine(newTable.ToString());
+            }
+                
             return newTable;
         }
 
@@ -301,99 +338,99 @@ namespace AlphaBetaPruning
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder("  ");
-            for (int i = 0; i < ChessTable.SIZE; ++i)
-            {
-                sb.Append($"{i} ");
-            }
+            //StringBuilder sb = new StringBuilder("  ");
+            //for (int i = 0; i < ChessTable.SIZE; ++i)
+            //{
+            //    sb.Append($"{i} ");
+            //}
 
-            sb.AppendLine();
-            for (int i = 0; i < ChessTable.SIZE; ++i)
-            {
-                sb.Append($"{i}|");
-                for (int j = 0; j < ChessTable.SIZE; ++j)
-                {
-                    int value = stateTable.GetValue(i, j);
-                    if (value == 0)
-                    {
-                        sb.Append('-');
-                    }
-                    else if (value == 1)
-                    {
-                        sb.Append('X');
-                    }
-                    else
-                    {
-                        sb.Append('O');
-                    }
+            //sb.AppendLine();
+            //for (int i = 0; i < ChessTable.SIZE; ++i)
+            //{
+            //    sb.Append($"{i}|");
+            //    for (int j = 0; j < ChessTable.SIZE; ++j)
+            //    {
+            //        int value = stateTable.GetValue(i, j);
+            //        if (value == 0)
+            //        {
+            //            sb.Append('-');
+            //        }
+            //        else if (value == 1)
+            //        {
+            //            sb.Append('X');
+            //        }
+            //        else
+            //        {
+            //            sb.Append('O');
+            //        }
 
-                    if (j < ChessTable.SIZE - 1)
-                    {
-                        sb.Append(" ");
-                    }
-                }
+            //        if (j < ChessTable.SIZE - 1)
+            //        {
+            //            sb.Append(" ");
+            //        }
+            //    }
 
-                sb.Append('|');
-                sb.AppendLine();
-            }
+            //    sb.Append('|');
+            //    sb.AppendLine();
+            //}
 
-            return sb.ToString();
+            return stateTable.ToString();
         }
 
-        public INode UpdateTable()
+        public ChessTable UpdateTable(ChessTable newTable)
         {
             for (int i = 0; i < ChessTable.SIZE; i++)
             {
                 for (int j = 0; j < ChessTable.SIZE; j++)
                 {
-                    if (stateTable.GetValue(i, j) == 1&& Player == PlayerType.Minimizing)
+                    if (newTable.GetValue(i, j) == 1&& Player == PlayerType.Maximizing)
                     {
-                        int LU = stateTable.GetValue(i - 1, j - 1);
-                        int L = stateTable.GetValue(i, j - 1);
-                        int LD = stateTable.GetValue(i + 1, j-1);
-                        int Up = stateTable.GetValue(i-1, j);
-                        int Down = stateTable.GetValue(i + 1, j);
-                        int R = stateTable.GetValue(i, j + 1);
-                        int RU = stateTable.GetValue(i - 1, j + 1);
-                        int RD = stateTable.GetValue(i + 1, j + 1);
+                        int LU = newTable.GetValue(i - 1, j - 1);
+                        int L = newTable.GetValue(i, j - 1);
+                        int LD = newTable.GetValue(i + 1, j-1);
+                        int Up = newTable.GetValue(i-1, j);
+                        int Down = newTable.GetValue(i + 1, j);
+                        int R = newTable.GetValue(i, j + 1);
+                        int RU = newTable.GetValue(i - 1, j + 1);
+                        int RD = newTable.GetValue(i + 1, j + 1);
                         //8 direction
                         if ((i + j) % 2 == 0)
                         {                            
                             if (L == R && L == 2)
                             {
-                                stateTable.SetValue(PlayerType.None, i, j - 1);
-                                stateTable.SetValue(PlayerType.None, i, j + 1);
+                                newTable.SetValue(PlayerType.None, i, j - 1);
+                                newTable.SetValue(PlayerType.None, i, j + 1);
                             }
                             if (LU == RD && LU == 2)
                             {
-                                stateTable.SetValue(PlayerType.None, i - 1, j - 1);
-                                stateTable.SetValue(PlayerType.None, i + 1, j + 1);
+                                newTable.SetValue(PlayerType.None, i - 1, j - 1);
+                                newTable.SetValue(PlayerType.None, i + 1, j + 1);
                             }
 
                             if (Up == Down && Up == 2)
                             {
-                                stateTable.SetValue(PlayerType.None, i - 1, j);
-                                stateTable.SetValue(PlayerType.None, i + 1, j);
+                                newTable.SetValue(PlayerType.None, i - 1, j);
+                                newTable.SetValue(PlayerType.None, i + 1, j);
                             }
 
                             if (LD == RU && LD == 2)
                             {
-                                stateTable.SetValue(PlayerType.None, i + 1, j-1);
-                                stateTable.SetValue(PlayerType.None, i - 1, j + 1);
+                                newTable.SetValue(PlayerType.None, i + 1, j-1);
+                                newTable.SetValue(PlayerType.None, i - 1, j + 1);
                             }
                         }
                         else
                         {
                             if (L == R && L == 2)
                             {
-                                stateTable.SetValue(PlayerType.None, i, j - 1);
-                                stateTable.SetValue(PlayerType.None, i, j + 1);
+                                newTable.SetValue(PlayerType.None, i, j - 1);
+                                newTable.SetValue(PlayerType.None, i, j + 1);
                             }
 
                             if (Up == Down && Up == 2)
                             {
-                                stateTable.SetValue(PlayerType.None, i - 1, j);
-                                stateTable.SetValue(PlayerType.None, i + 1, j);
+                                newTable.SetValue(PlayerType.None, i - 1, j);
+                                newTable.SetValue(PlayerType.None, i + 1, j);
                             }
                         }
                         i = ChessTable.SIZE;
@@ -401,7 +438,12 @@ namespace AlphaBetaPruning
                     }     
                 }
             }
-            return this;
+            return newTable;
+        }
+
+        public INode UpdateTable()
+        {
+            throw new NotImplementedException();
         }
     }
 }

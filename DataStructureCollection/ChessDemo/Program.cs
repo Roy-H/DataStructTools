@@ -19,7 +19,7 @@ namespace ChessDemo
         {
             //AlphaBetaDemo(new ReversiNode(), 5U);
             //AlphaBetaDemo(new TicTacToeNode(), 2U);
-            AlphaBetaDemo2((new ChessNode().ResetTable()), 3U);
+            AlphaBetaDemo2((new ChessNode().ResetTable()), 6U);
         }
 
         private static void AlphaBetaDemo2<Node>(Node state, uint depth) where Node: DataStructureCollection.INode
@@ -27,18 +27,14 @@ namespace ChessDemo
             DataStructureCollection.AlphaBeta<Node> search = new DataStructureCollection.AlphaBeta<Node>() { Depth = depth};
             //state.ResetTable();
             //Console.WriteLine(state);
+            Random r = new Random();
             while (state.Children.Any())
-            {
-                
+            {               
+                //search.Depth = (uint)r.Next(1, 5);
                 state = search.BestAsync(state).Result;
+                Console.WriteLine("---------------------");
                 Console.WriteLine(state);
-                //update state
-                if (state.Opponent == PlayerType.Maximizing)
-                {
-                    //only when max remove can delete node of min
-                    state.UpdateTable();
-                }               
-                Console.WriteLine(state);
+                Console.WriteLine("---------------------");
             }
 
             Console.WriteLine(state);
