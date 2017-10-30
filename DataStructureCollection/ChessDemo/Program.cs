@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataStructureCollection;
+using System.Threading;
 
 namespace ChessDemo
 {
@@ -19,7 +20,7 @@ namespace ChessDemo
         {
             //AlphaBetaDemo(new ReversiNode(), 5U);
             //AlphaBetaDemo(new TicTacToeNode(), 2U);
-            AlphaBetaDemo2((new ChessNode().ResetTable()), 6U);
+            AlphaBetaDemo2((new ChessNode().ResetTable()), 5U);
         }
 
         private static void AlphaBetaDemo2<Node>(Node state, uint depth) where Node: DataStructureCollection.INode
@@ -35,16 +36,17 @@ namespace ChessDemo
                 Console.WriteLine("---------------------");
                 Console.WriteLine(state);
                 Console.WriteLine("---------------------");
+                Thread.Sleep(500);
             }
 
-            Console.WriteLine(state);
+            //Console.WriteLine(state);
 
             Value winner = state.Heuristics > 0 ? Value.Maximizing
                 : state.Heuristics < 0 ? Value.Minimizing
                 : Value.None;
 
             Console.WriteLine($"Game over. Winner: {winner}.");
-            Console.WriteLine();
+            Console.ReadKey();
         }
 
         /// <summary>

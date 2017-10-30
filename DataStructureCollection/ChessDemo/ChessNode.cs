@@ -31,12 +31,12 @@ namespace AlphaBetaPruning
         private readonly Lazy<int> heuristics;
         #endregion
 
-        public ChessNode():this(new ChessTable(), PlayerType.Maximizing)
+        public ChessNode() : this(new ChessTable(), PlayerType.Maximizing)
         {
 
         }
 
-        public ChessNode(ChessTable table,PlayerType playerType)
+        public ChessNode(ChessTable table, PlayerType playerType)
         {
             stateTable = table;
 
@@ -89,7 +89,7 @@ namespace AlphaBetaPruning
                                 if (
                                 stateTable.GetValue(i + 1, j) != 0 &&
                                 stateTable.GetValue(i, j + 1) != 0 &&
-                                stateTable.GetValue(i, j - 1) != 0 &&                               
+                                stateTable.GetValue(i, j - 1) != 0 &&
                                 stateTable.GetValue(i - 1, j) != 0)
                                 {
                                     return PlayerType.Minimizing;
@@ -98,55 +98,55 @@ namespace AlphaBetaPruning
                                 j = ChessTable.SIZE;
                             }
                         }
-                        
-                            /*
-                            if (stateTable.GetValue(i + 1, j + 1) == 0)
-                            {
-                                i = ChessTable.SIZE;
-                                break;
-                            }
-                            else if (stateTable.GetValue(i + 1, j) == 0)
-                            {
-                                i = ChessTable.SIZE;
-                                break;
-                            }
-                            else if (stateTable.GetValue(i, j + 1) == 0)
-                            {
-                                i = ChessTable.SIZE;
-                                break;
-                            }
-                            else if (stateTable.GetValue(i + 1, j - 1) == 0)
-                            {
-                                i = ChessTable.SIZE;
-                                break;
-                            }
-                            else if (stateTable.GetValue(i - 1, j + 1) == 0)
-                            {
-                                i = ChessTable.SIZE;
-                                break;
-                            }
-                            else if (stateTable.GetValue(i - 1, j - 1) == 0)
-                            {
-                                i = ChessTable.SIZE;
-                                break;
-                            }
-                            else if (stateTable.GetValue(i, j - 1) == 0)
-                            {
-                                i = ChessTable.SIZE;
-                                break;
-                            }
-                            else if (stateTable.GetValue(i - 1, j) == 0)
-                            {
-                                i = ChessTable.SIZE;
-                                break;
-                            }
-                            else
-                            {
-                                return PlayerType.Minimizing;
-                            }
-                            */
 
-                        
+                        /*
+                        if (stateTable.GetValue(i + 1, j + 1) == 0)
+                        {
+                            i = ChessTable.SIZE;
+                            break;
+                        }
+                        else if (stateTable.GetValue(i + 1, j) == 0)
+                        {
+                            i = ChessTable.SIZE;
+                            break;
+                        }
+                        else if (stateTable.GetValue(i, j + 1) == 0)
+                        {
+                            i = ChessTable.SIZE;
+                            break;
+                        }
+                        else if (stateTable.GetValue(i + 1, j - 1) == 0)
+                        {
+                            i = ChessTable.SIZE;
+                            break;
+                        }
+                        else if (stateTable.GetValue(i - 1, j + 1) == 0)
+                        {
+                            i = ChessTable.SIZE;
+                            break;
+                        }
+                        else if (stateTable.GetValue(i - 1, j - 1) == 0)
+                        {
+                            i = ChessTable.SIZE;
+                            break;
+                        }
+                        else if (stateTable.GetValue(i, j - 1) == 0)
+                        {
+                            i = ChessTable.SIZE;
+                            break;
+                        }
+                        else if (stateTable.GetValue(i - 1, j) == 0)
+                        {
+                            i = ChessTable.SIZE;
+                            break;
+                        }
+                        else
+                        {
+                            return PlayerType.Minimizing;
+                        }
+                        */
+
+
                     }
                 }
             }
@@ -186,21 +186,81 @@ namespace AlphaBetaPruning
             return count;
         }
 
+        private int GetMaxAroundNum()
+        {           
+            for (int i = 0; i < ChessTable.SIZE; i++)
+            {
+                for (int j = 0; j < ChessTable.SIZE; j++)
+                {
+                    if (stateTable.GetValue(i, j) == 1)
+                    {
+                        int LU = stateTable.GetValue(i - 1, j - 1);
+                        int L = stateTable.GetValue(i, j - 1);
+                        int LD = stateTable.GetValue(i + 1, j - 1);
+                        int Up = stateTable.GetValue(i - 1, j);
+                        int Down = stateTable.GetValue(i + 1, j);
+                        int R = stateTable.GetValue(i, j + 1);
+                        int RU = stateTable.GetValue(i - 1, j + 1);
+                        int RD = stateTable.GetValue(i + 1, j + 1);
+                        return LU + L + LD + Up + Down + R + RU + RD;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        private int GetDistance(Position p1,Position p2)
+        {
+            return Math.Abs(p1.Item1 - p2.Item1) + Math.Abs(p1.Item2 - p2.Item2);
+        }
+
+        private Position GetMaxPosition()
+        {
+            for (int i = 0; i < ChessTable.SIZE; i++)
+            {
+                for (int j = 0; j < ChessTable.SIZE; j++)
+                {
+                    if (stateTable.GetValue(i, j) == 1)
+                        return new Position(i, j);
+                }
+            }
+            return null;
+        }
+        private int GetAllDistance()
+        {
+            var mPosition = GetMaxPosition();
+            int distance = 0;
+            for (int i = 0; i < ChessTable.SIZE; i++)
+            {
+                for (int j = 0; j < ChessTable.SIZE; j++)
+                {
+                    if (stateTable.GetValue(i, j) == 2)
+                    {
+                        distance += GetDistance(mPosition, new Position(i, j));
+                    }
+                }
+            }
+            return distance;
+        }
+
         private int GetHeuristics()
         {
             if (Player == PlayerType.Maximizing)
             {
-                var value1 = GetMinNum();
-                Console.WriteLine("GetHeuristics 1: " + value1);
-                Console.WriteLine(stateTable.ToString());
-                return value1;
+                var value1 = (GetMinNum()+1)*10;
+                var value2 = GetAllDistance();
+                //Console.WriteLine("GetHeuristics 1: " + value1);
+                //Console.WriteLine(stateTable.ToString());
+                return value1+(int)(value2*0.5);
             }
             else if (Player == PlayerType.Minimizing)
             {
-                var value2 = GetMinNum();
-                Console.WriteLine("GetHeuristics 2: " + value2);
-                Console.WriteLine(stateTable.ToString());
-                return -value2;
+                var value1 = (GetMinNum()+1)*10;
+                var value2 = GetAllDistance();
+                var value3 = GetMaxAroundNum();
+                //Console.WriteLine("GetHeuristics 2: " + value2);
+                //Console.WriteLine(stateTable.ToString());
+                return -value1 - (int)(value2 * 0.5)-value3;
             }
             return 0;
         }
@@ -441,9 +501,5 @@ namespace AlphaBetaPruning
             return newTable;
         }
 
-        public INode UpdateTable()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

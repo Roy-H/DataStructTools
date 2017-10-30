@@ -219,65 +219,6 @@ namespace DataStructureCollection
         Minimizing
     }
 
-    public class Node:INode
-    {
-        
-        public Node()
-        {
-            Children = new List<Node>();
-        }
-
-        public bool AddChild(Node node)
-        {
-            Debug.Assert(object.Equals(null, node),"node is null error");
-            if(Children == null)
-                Children = new List<Node>();
-            if (Children.Contains(node))
-                return false;
-            Children.Add(node);
-            return true;
-        }
-
-        public bool RemoveChildNode(Node node)
-        {
-            if (node == null)
-                return false;
-            if (!Children.Contains(node))
-                return false;
-            Children.Remove(node);
-            return true;
-        }
-
-        
-        INode INode.ResetTable()
-        {
-            throw new NotImplementedException();
-        }
-
-        public INode UpdateTable()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int Value { get; set; }
-
-        public int Alpha { get; set; }
-
-        public int Beta { get; set; }
-
-        public IList<Node> Children { get; set; }      
-
-        public PlayerType LType { get; set; }
-
-        public PlayerType Player => throw new NotImplementedException();
-
-        public PlayerType Opponent => throw new NotImplementedException();
-
-        IReadOnlyList<INode> INode.Children => throw new NotImplementedException();
-
-        public int Heuristics => throw new NotImplementedException();
-    }
-
     public interface INode
     {
         /// <summary>
@@ -301,8 +242,6 @@ namespace DataStructureCollection
         /// </summary>
         int Heuristics { get; }
 
-        INode ResetTable();
-
-        INode UpdateTable();
+        
     }
 }
