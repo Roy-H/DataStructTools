@@ -1,11 +1,7 @@
 ﻿using AlphaBeta;
 using AlphaBetaPruning;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataStructureCollection;
 using System.Threading;
 
 namespace ChessDemo
@@ -20,7 +16,7 @@ namespace ChessDemo
         {
             //AlphaBetaDemo(new ReversiNode(), 5U);
             //AlphaBetaDemo(new TicTacToeNode(), 2U);
-            AlphaBetaDemo2((new ChessNode().ResetTable()), 5U);
+            AlphaBetaDemo2((new ChessNode().ResetTable()), 3U);
         }
 
         private static void AlphaBetaDemo2<Node>(Node state, uint depth) where Node: DataStructureCollection.INode
@@ -30,13 +26,14 @@ namespace ChessDemo
             //Console.WriteLine(state);
             Random r = new Random();
             while (state.Children.Any())
-            {               
+            {
                 //search.Depth = (uint)r.Next(1, 5);
-                state = search.BestAsync(state).Result;
+                //state = search.BestAsync(state).Result;
+                state = search.Best(state);
                 Console.WriteLine("---------------------");
                 Console.WriteLine(state);
                 Console.WriteLine("---------------------");
-                Thread.Sleep(500);
+                //Thread.Sleep(500);
             }
 
             //Console.WriteLine(state);

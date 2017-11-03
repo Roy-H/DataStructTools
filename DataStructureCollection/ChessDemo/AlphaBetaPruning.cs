@@ -14,7 +14,6 @@ namespace DataStructureCollection
     {
         public uint Depth { get; set; }
 
-
         public async Task<Node> BestAsync(Node root)
         {
             if (root == null)
@@ -157,48 +156,6 @@ namespace DataStructureCollection
                 return value;
             }
         }
-    }
-
-    public class AlphaBetaHelper<Node> where Node:INode
-    {
-        //private uint searchDepth;
-        public uint Depth { get; set; }
-
-        private void InitTree()
-        {
-            
-        }
-
-        public AlphaBetaHelper()
-        {
-            Depth = 3;
-        }
-
-        public async Task<Node> Best(Node root)
-        {
-            if (root == null)
-            {
-                throw new Exception();
-            }
-            else if (root.Player == PlayerType.None)
-            {
-                throw new Exception();
-            }
-            bool maximizing = root.Player == PlayerType.Maximizing;
-            for (int i = 0; i < root.Children.Count; i++)
-            {
-
-            }
-            await Task.Factory.StartNew(() => 
-            {
-                
-            });
-            return root;
-        }
-
-       
-
-
     }
 
     public enum PlayerType
