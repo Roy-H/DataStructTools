@@ -245,6 +245,14 @@ namespace AlphaBetaPruning
 
         private int GetHeuristics()
         {
+            if (winner.Value == PlayerType.Maximizing)
+            {
+                return int.MaxValue;
+            }
+            else if (winner.Value == PlayerType.Minimizing)
+            {
+                return int.MinValue;
+            }
             if (Player == PlayerType.Maximizing)
             {
                 var value1 = (GetMinNum()+1)*10;
