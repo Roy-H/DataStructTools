@@ -69,9 +69,45 @@ namespace DataStructureCollection.DancingLink
         }
     }
 
-    public class Head:Node
+    public class Header:Node
     {
-        public int ColNum { get; set; }
+        public int ColumnNum { get; set; }
+
+        public int Count { get; set; }
+
+        public Header(int column)
+        {
+            ColumnNum = column;
+            Count = 0;
+            Up = this;
+            Down = this;
+        }
+
+        public Node AppendDown()
+        {
+            Node child = new Node();
+            Up.Down = child;
+            child.Down = this;
+            child.Up = Up;
+            Up = child;
+            Count++;
+            //child.head = this;
+            return child;
+        }
+
+        public Node AppendDown(int row,int col)
+        {
+            Node child = new Node();
+            Up.Down = child;
+            child.Down = this;
+            child.Up = Up;
+            Up = child;
+            child.Col = col;
+            child.Row = row;
+            Count++;
+            //child.head = this;
+            return child;
+        }
     }
 
     public class ExactProblemSolver
@@ -93,10 +129,10 @@ namespace DataStructureCollection.DancingLink
             "0,1,0,0,0,0,1\n" +
             "0,0,0,1,1,0,1\n";
 
-        Head head;
+        Header head;
         private void Init()
         {
-            head = new Head();
+            //head = new Header();
             for (int i = 0; i < exampleMatrix.GetLength(0); i++)
             {               
                 for (int j = 0; j < exampleMatrix.GetLength(1); j++)
