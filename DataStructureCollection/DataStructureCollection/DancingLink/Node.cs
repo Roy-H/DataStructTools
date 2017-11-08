@@ -18,6 +18,8 @@ namespace DataStructureCollection.DancingLink
 
         public int Row { get; set; }
 
+        public Header Head { get; set; }
+
         public void RemoveFromColumn()
         {
             Up.Down = this.Down;
@@ -108,6 +110,16 @@ namespace DataStructureCollection.DancingLink
             //child.head = this;
             return child;
         }
+
+        public void Mark()
+        {
+
+        }
+
+        public void UnMark()
+        {
+
+        }
     }
 
     public class ExactProblemSolver
@@ -130,16 +142,58 @@ namespace DataStructureCollection.DancingLink
             "0,0,0,1,1,0,1\n";
 
         Header head;
-        private void Init()
+        private void BuildMatrix()
         {
-            //head = new Header();
-            for (int i = 0; i < exampleMatrix.GetLength(0); i++)
-            {               
-                for (int j = 0; j < exampleMatrix.GetLength(1); j++)
-                {
+            head = new Header(-1);
+            var indexHead = head;
+            for (int i = 0; i < exampleMatrix.GetLength(1); i++)
+            {
+                var newHead = new Header(i);
+                indexHead.Right = newHead;
+                indexHead = newHead;
+            }
+            indexHead.Right = head;
+            head.Left = indexHead;
 
+            indexHead = (Header)head.Right;
+            for (int j = 0; j < exampleMatrix.GetLength(0); j++)
+            {
+                indexHead
+                for (int i = 0; i < exampleMatrix.GetLength(1); i++)
+                {
+                    if (exampleMatrix[i, j] == 1)
+                    {
+
+                    }
                 }
             }
+        }
+
+        public bool Solve(Header root)
+        {
+            if (root.Right == root)
+                return true;
+            var rhead = root.Right as Header;
+            rhead.Mark();
+            for (Node i = rhead.Down; i.Down!=rhead;i = i.Down)
+            {
+                for (Node j = i.Right;  i != j ;j = j.Right)
+                {
+                    j.Head.Mark();
+                }
+                if (Solve(root))
+                {
+                    return true;
+                }
+                else
+                {
+                    for (Node j = i.Right; i != j; j = j.Right)
+                    {
+                        j.Head.UnMark();
+                    }
+                }
+            }
+            return false;
         }
     }
 }
